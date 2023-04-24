@@ -1,0 +1,36 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: '1.1.2'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(Build.SourcesDirectory)'
+    backendType: 'azurerm'
+    backendServiceArm: 'terrafromiacdevops1'
+    ensureBackend: true
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'validate'
+    workingDirectory: '$(Build.SourcesDirectory)'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'plan'
+    workingDirectory: '$(Build.SourcesDirectory)'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'apply'
+    workingDirectory: '$(Build.SourcesDirectory)'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
+    autoApprove: true
