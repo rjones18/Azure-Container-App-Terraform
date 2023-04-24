@@ -26,11 +26,11 @@ steps:
   inputs:
     command: 'plan'
     workingDirectory: '$(Build.SourcesDirectory)'
-    environmentServiceNameAzureRM: '<terrafromiacdevops1>'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
 
 - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformCLI@0
   inputs:
     command: 'apply'
     workingDirectory: '$(Build.SourcesDirectory)'
-    environmentServiceNameAzureRM: '<terrafromiacdevops1>'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
     autoApprove: true
