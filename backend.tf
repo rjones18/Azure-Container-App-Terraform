@@ -5,6 +5,6 @@ backend "azurerm" {
     resource_group_name  = "test-grp"
     storage_account_name = "regterraformstate201"
     container_name       = "tfstatefiles"
-    key                  = "pokedex-app-service-terraform.tfstate"
+    key                  = "dotnet-container-app-terraform.tfstate"
   }
 }

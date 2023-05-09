@@ -1,32 +1,36 @@
 resource "azurerm_resource_group" "example" {
-  name     = "python-container-resources"
-  location = "Central US"
+  name     = "${var.prefix}-k8s-resources"
+  location = var.location
 }
 
-resource "azurerm_container_group" "example" {
-  name                = "example-container-group"
+resource "azurerm_kubernetes_cluster" "example" {
+  name                = "dotnet-app-aks1"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  ip_address_type     = "Public"
-  dns_name_label      = "example-azure-container-app"
-  os_type             = "Linux"
+  dns_prefix          = "dotnet-aks1"
 
-  container {
-    name   = "example-container"
-    image  = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
-    cpu    = "0.5"
-    memory = "1.5"
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2_v2"
+  }
 
-    ports {
-      port     = 80
-      protocol = "TCP"
-    }
+  identity {
+    type = "SystemAssigned"
   }
 
   tags = {
-    Terraform = "true"
+    Environment = "Production"
   }
 }
 
+output "client_certificate" {
+  value     = azurerm_kubernetes_cluster.example.kube_config.0.client_certificate
+  sensitive = true
+}
 
+output "kube_config" {
+  value = azurerm_kubernetes_cluster.example.kube_config_raw
 
+  sensitive = true
+}
